@@ -1,32 +1,80 @@
 <template>
-  <v-container fluid>
-    <h1>{{ numberOfPairs }} pair/s left</h1>
-    <h1>Number of attempts: {{ numberOfAttempts }}</h1>
-    <h1>Time: {{ formattedElapsedTime }}</h1>
-    <v-btn @click="resetGame()">Reset</v-btn>
-    <v-row justify="center" align="center" align-content="center">
-      <v-col
-        class="d-flex justify-center ma-5"
-        cols="2"
-        v-for="item in items"
-        :key="item"
-      >
-        <flipper
-          class="d-inline ma-5"
-          :flipped="!item.state"
-          @click="onClick(item)"
-        >
-          <v-card slot="front">
-            <v-card-text>
-              {{ item.val }}
+  <v-container class="d-flex" fluid>
+    <v-row>
+      <v-col cols="5" class="pt-10 d-flex justify-center align-center">
+        <v-container fluid>
+          <v-card class="ml-16">
+            <v-card-title
+              class="bg--yellow--accent text-center justify-center white--text display-1 font-weight-light"
+              >Memory Game</v-card-title
+            >
+            <v-card-text class="d-flex flex-row pt-3 black--text">
+              <h1
+                class="title-1 font-weight-light
+              "
+              >
+                Time: {{ formattedElapsedTime }}
+              </h1>
+              <v-spacer></v-spacer>
+              <h1
+                class="title-1 font-weight-light
+              "
+              >
+                {{ numberOfPairs }} pair/s left
+              </h1>
             </v-card-text>
-          </v-card>
-          <v-card slot="back">
-            <v-card-text class="pa-0">
-              <v-img :src="cardBackImage" contain></v-img>
+            <v-card-text class="black--text d-flex justify-center">
+              <h1
+                class="title-1 font-weight-light
+              "
+              >
+                Attempts: {{ numberOfAttempts }}
+              </h1>
             </v-card-text>
+            <v-divider class="mx-5"></v-divider>
+            <v-card-actions class="d-flex justify-center">
+              <v-btn outlined color="#ffd700" @click="resetGame()">Reset</v-btn>
+            </v-card-actions>
           </v-card>
-        </flipper>
+        </v-container>
+      </v-col>
+      <v-col class="pt-0">
+        <v-sheet class="mr-16">
+          <v-row
+            class="ml-16"
+            justify="center"
+            align="center"
+            align-content="center"
+          >
+            <v-col
+              class="d-flex justify-center my-5"
+              cols="3"
+              v-for="item in items"
+              :key="item"
+            >
+              <flipper
+                class="d-inline-block my-5"
+                :flipped="!item.state"
+                @click="onClick(item)"
+              >
+                <v-card color="yellow" elevation="10" slot="front">
+                  <v-card-text class="d-flex justify-center pa-0">
+                    <v-sheet
+                      class="flex-fill pa-0 ma-0"
+                      :color="item.color"
+                      height="11.5vh"
+                    ></v-sheet>
+                  </v-card-text>
+                </v-card>
+                <v-card slot="back" elevation="10">
+                  <v-card-text class="pa-0">
+                    <v-img :src="cardBackImage" contain></v-img>
+                  </v-card-text>
+                </v-card>
+              </flipper>
+            </v-col>
+          </v-row>
+        </v-sheet>
       </v-col>
     </v-row>
   </v-container>
@@ -83,7 +131,16 @@ export default {
         this.resetSelection();
       }
 
-      if (this.gameIsFinished()) this.stop();
+      if (this.gameIsFinished()) {
+        this.stop();
+        window.setTimeout(() => {
+          this.$emit(
+            "finished",
+            this.numberOfAttempts,
+            this.formattedElapsedTime
+          );
+        }, 1000);
+      }
     },
 
     showCard(item) {
