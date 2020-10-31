@@ -44,10 +44,6 @@
             <v-btn color="#ffd700" outlined @click="resetGame()">
               Play Again!
             </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn color="grey" outlined @click="closeGame()">
-              Close
-            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
