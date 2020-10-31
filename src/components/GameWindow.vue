@@ -49,8 +49,8 @@
             <v-col
               class="d-flex justify-center my-5"
               cols="3"
-              v-for="item in items"
-              :key="item"
+              v-for="(item, i) in items"
+              :key="'flipper_' + i"
             >
               <flipper
                 class="d-inline-block my-5"

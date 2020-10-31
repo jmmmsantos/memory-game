@@ -21,7 +21,7 @@
           </v-card-text>
 
           <v-card-actions class="justify-center">
-            <v-btn color="#ffd700" outlined @click="startDialog = false">
+            <v-btn color="#ffd700" outlined @click="startGame()">
               Play Game!
             </v-btn>
           </v-card-actions>
@@ -54,9 +54,17 @@
       <v-container fluid class="pa-0" v-if="$vuetify.breakpoint.mobile">
         <UnderConstruction />
       </v-container>
-      <v-container fluid v-show="!startDialog">
+      <v-container fluid v-show="gameWindow">
         <GameWindow @finished="onFinished" />
       </v-container>
+      <v-overlay class="d-flex flex-column" :opacity="1" :value="overlay">
+        <div class="d-flex justify-center">
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </div>
+        <h1 class="font-weight-light py-5">
+          Now Loading...
+        </h1>
+      </v-overlay>
     </v-main>
   </v-app>
 </template>
@@ -77,6 +85,8 @@ export default {
     //
     startDialog: true,
     endDialog: false,
+    overlay: false,
+    gameWindow: false,
     time: null,
     attempts: null,
   }),
@@ -97,6 +107,17 @@ export default {
       window.close();
       return false;
     },
+
+    startGame() {
+      this.startDialog = false;
+      this.overlay = true;
+      window.setTimeout(() => {
+        this.gameWindow = true;
+      }, 500);
+      window.setTimeout(() => {
+        this.overlay = false;
+      }, 1500);
+    },
   },
 };
 </script>
@@ -106,6 +127,7 @@ export default {
   background-color: #ffd700 !important;
 }
 
+html,
 .container {
   -webkit-user-select: none;
   -moz-user-select: none;
